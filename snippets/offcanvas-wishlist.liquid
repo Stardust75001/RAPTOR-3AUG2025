@@ -37,22 +37,22 @@
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
             </svg>
             {{ 'general.wishlist.empty_html' | t }} 
-        </div>
-        <ul {{ settings.offcanvas_shadow_sp }} {{ settings.offcanvas_border_color }}
-            id="offcanvas-wishlist-product-listing" 
-            class="product-listing list-unstyled mb-6"
-            data-img-width="{{ img_width }}"
-            data-img-height="{{ img_height }}"
-            data-img-thumbnail="{{ settings.offcanvas_img_thumbnail }} {{ settings.offcanvas_shadow_sp }} {{ settings.offcanvas_border_color }}"
-            data-show-atc-form="{{ settings.wishlist_show_atc_form }}"
-            data-text-wishlist-remove="{{ 'general.wishlist.remove_from_wishlist' | t }}"
-            data-text-price-regular="{{ 'product.price_regular' | t }}"
-            data-text-price-from="{{ 'product.price_from' | t }}"
-            data-text-price-sale="{{ 'product.price_sale' | t }}"
-            data-text-add="{{ 'product.add' | t }}"
-            data-text-select-variant="{{ 'product.select_variant' | t }}"
-            hidden>
-        </ul>
-    </div>
+      </div>
+<ul
+  id="offcanvas-wishlist-product-listing" 
+  class="product-listing list-unstyled mb-6 {{ settings.offcanvas_shadow_sp }} {{ settings.offcanvas_border_color }}"
+  data-img-width="{{ img_width }}"
+  data-img-height="{{ img_height }}"
+  data-img-thumbnail="{{ settings.offcanvas_img_thumbnail }} {{ settings.offcanvas_shadow_sp }} {{ settings.offcanvas_border_color }}"
+  data-show-atc-form="{{ settings.wishlist_show_atc_form }}"
+  data-text-wishlist-remove="{{ 'general.wishlist.remove_from_wishlist' | t }}"
+  data-text-price-regular="{{ 'product.price_regular' | t }}"
+  data-text-price-from="{{ 'product.price_from' | t }}"
+  data-text-price-sale="{{ 'product.price_sale' | t }}"
+  data-text-add="{{ 'product.add' | t }}"
+  data-text-select-variant="{{ 'product.select_variant' | t }}"
+  hidden>
+</ul>
+</div>
 </div>
 {% endif %}
