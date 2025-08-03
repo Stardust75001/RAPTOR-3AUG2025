@@ -72,7 +72,19 @@ window.removeOrAddFromWishlist = async (btn) => {
    Initialisation liste de souhaits
    ===================== */
 const initializeWishlist = () => {
+  console.log('🚀 initializeWishlist called');
   const wishlist = JSON.parse(localStorage.getItem(localStorageKey)) || [];
+  console.log('💖 Wishlist items:', wishlist.length, wishlist);
+
+  // Vérifier si les éléments DOM existent
+  const offcanvasWishlist = document.querySelector("#offcanvas-wishlist");
+  const wishlistEmpty = document.querySelector("#offcanvas-wishlist-empty");
+  const wishlistListing = document.querySelector("#offcanvas-wishlist-product-listing");
+  
+  console.log('🔍 DOM elements check:');
+  console.log('- offcanvas-wishlist:', !!offcanvasWishlist);
+  console.log('- wishlist-empty:', !!wishlistEmpty);
+  console.log('- wishlist-listing:', !!wishlistListing);
 
   document.querySelectorAll(".btn-wishlist-add-remove").forEach((btn) => {
     const isWishlisted = wishlist.some(
@@ -100,9 +112,16 @@ const initializeWishlist = () => {
   });
 
   if (wishlist.length) {
+    console.log('📝 Building wishlist content...');
     const productList = document.querySelector(
       "#offcanvas-wishlist-product-listing"
     );
+    
+    if (!productList) {
+      console.error('❌ Product list element not found!');
+      return;
+    }
+    
     let productListItems = "";
 
     wishlist.forEach((product) => {
@@ -261,6 +280,7 @@ const initializeWishlist = () => {
             `;
     });
     productList.innerHTML = productListItems;
+    console.log('✅ Wishlist content updated, items:', wishlist.length);
 
     window.SPR?.initDomEls();
     window.SPR?.loadBadges();
@@ -281,17 +301,118 @@ const initializeWishlist = () => {
       .querySelector("#offcanvas-wishlist-product-listing")
       .removeAttribute("hidden");
   } else {
-    document
-      .querySelector("#offcanvas-wishlist-empty")
-      .removeAttribute("hidden");
-    document
-      .querySelector("#offcanvas-wishlist-product-listing")
-      .setAttribute("hidden", "hidden");
-    document.querySelector("#offcanvas-wishlist-product-listing").innerHTML =
-      "";
+    console.log('📭 Wishlist is empty, showing empty state');
+    const emptyElement = document.querySelector("#offcanvas-wishlist-empty");
+    const listingElement = document.querySelector("#offcanvas-wishlist-product-listing");
+    
+    if (emptyElement && listingElement) {
+      emptyElement.removeAttribute("hidden");
+      listingElement.setAttribute("hidden", "hidden");
+      listingElement.innerHTML = "";
+    } else {
+      console.error('❌ Empty or listing elements not found!');
+      // Fallback: essayer de créer le contenu vide dynamiquement
+      const offcanvasBody = document.querySelector("#offcanvas-wishlist .offcanvas-body");
+      if (offcanvasBody && !emptyElement) {
+        console.log('🔧 Creating empty state element...');
+        offcanvasBody.innerHTML = `
+          <div id="offcanvas-wishlist-empty" class="text-muted text-center py-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="opacity-75 mb-2" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <p>{{ 'general.wishlist.empty_html' | t }}</p>
+          </div>
+          <ul id="offcanvas-wishlist-product-listing" class="product-listing list-unstyled mb-6" hidden></ul>
+        `;
+      }
+    }
+  }
+  console.log('🏁 initializeWishlist completed');
+};
+
+// Assurer que initializeWishlist() s'exécute quand le DOM est prêt
+const runInitializeWishlist = () => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      // Petit délai pour s'assurer que tous les offcanvas sont rendus
+      setTimeout(initializeWishlist, 100);
+    });
+  } else {
+    // Si le DOM est déjà prêt, ajoutons un délai pour les offcanvas
+    setTimeout(initializeWishlist, 100);
   }
 };
-initializeWishlist();
+
+runInitializeWishlist();
+
+// Fonction de test pour ajouter un produit fictif (pour débogage)
+window.testAddToWishlist = () => {
+  const testProduct = {
+    id: 123456,
+    handle: 'test-product',
+    url: '/products/test-product',
+    title: 'Test Product',
+    compare_at_price: null,
+    price: 2999,
+    price_varies: false,
+    featured_image: null,
+    vendor: 'Test Vendor',
+    time: Date.now(),
+    variants: [{
+      id: 789012,
+      title: 'Default Title',
+      compare_at_price: null,
+      price: 2999,
+      featured_image: { src: null }
+    }]
+  };
+  
+  let wishlist = JSON.parse(localStorage.getItem(localStorageKey)) || [];
+  wishlist.push(testProduct);
+  localStorage.setItem(localStorageKey, JSON.stringify(wishlist));
+  console.log('🧪 Test product added to wishlist');
+  initializeWishlist();
+};
+
+// Fonction de diagnostic
+window.diagnoseWishlist = () => {
+  console.log('🔍 WISHLIST DIAGNOSTIC');
+  console.log('======================');
+  
+  // Vérifier les éléments DOM
+  const offcanvas = document.querySelector("#offcanvas-wishlist");
+  const empty = document.querySelector("#offcanvas-wishlist-empty");
+  const listing = document.querySelector("#offcanvas-wishlist-product-listing");
+  const buttons = document.querySelectorAll(".wishlist-icon, [data-bs-target='#offcanvas-wishlist']");
+  const badges = document.querySelectorAll(".wishlist-count-badge");
+  
+  console.log('DOM Elements:');
+  console.log('- Offcanvas wishlist:', !!offcanvas);
+  console.log('- Empty element:', !!empty);
+  console.log('- Listing element:', !!listing);
+  console.log('- Wishlist buttons:', buttons.length);
+  console.log('- Count badges:', badges.length);
+  
+  // Vérifier localStorage
+  const wishlist = JSON.parse(localStorage.getItem(localStorageKey)) || [];
+  console.log('Wishlist data:', wishlist.length, 'items');
+  
+  // Vérifier Bootstrap
+  console.log('Bootstrap available:', !!window.bootstrap);
+  
+  // Tenter d'ouvrir l'offcanvas manuellement
+  if (offcanvas && window.bootstrap) {
+    console.log('✅ Attempting to open offcanvas...');
+    try {
+      const offcanvasInstance = new bootstrap.Offcanvas(offcanvas);
+      offcanvasInstance.show();
+    } catch (error) {
+      console.error('❌ Error opening offcanvas:', error);
+    }
+  }
+  
+  console.log('======================');
+};
 
 window.addEventListener("updated.shopiweb.cart", initializeWishlist);
 window.addEventListener("onCollectionShopiwebUpdate", initializeWishlist);
