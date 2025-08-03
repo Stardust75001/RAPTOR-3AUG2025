@@ -869,7 +869,7 @@ main {
 }
 @media screen and (max-width: 767px) {
   main {
-    padding-top: 257px !important;
+    padding-top: 256px !important;
   }
 }
 
