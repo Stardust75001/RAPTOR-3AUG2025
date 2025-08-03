@@ -37,12 +37,72 @@
 /* =====================
    Panier offcanvas
    ===================== */
+#offcanvas-cart {
+    padding-top: 80px; /* Ajuster selon la hauteur de votre navbar */
+    /* Alternative plus robuste pour éviter la troncature */
+    top: 80px !important;
+    height: calc(100vh - 80px) !important;
+    position: fixed !important;
+}
+
+/* Correction pour les écrans mobiles */
+@media (max-width: 768px) {
+    #offcanvas-cart {
+        padding-top: 70px; /* Hauteur navbar mobile */
+        top: 70px !important;
+        height: calc(100vh - 70px) !important;
+    }
+}
+
+#offcanvas-cart .offcanvas-header {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    position: sticky;
+    top: 0;
+    background: inherit;
+    z-index: 10;
+    border-bottom: 1px solid var(--bs-border-color, #dee2e6);
+}
+
 #offcanvas-cart .offcanvas-body {
     transition: all .2s ease-out;
+    padding-top: 1rem;
+    overflow-y: auto;
+    flex: 1;
 }
 
 #offcanvas-cart.loading .offcanvas-body {
     opacity: .25;
+}
+
+/* Correction du positionnement et centrage du contenu */
+#offcanvas-cart .offcanvas-header {
+    position: relative;
+    z-index: 1;
+}
+
+#offcanvas-cart .offcanvas-body {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+/* Centrage des images et textes dans l'offcanvas */
+#offcanvas-cart .product-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#offcanvas-cart .product-item img {
+    margin: 0 auto;
+    display: block;
+}
+
+#offcanvas-cart .text-center {
+    text-align: center !important;
 }
 
 #offcanvas-cart .product-item-price {
@@ -119,11 +179,19 @@
 #offcanvas-cart.rounded-cart {
     margin: 0.75rem;
     border-radius: var(--bs-border-radius);
+    /* Correction pour éviter la troncature */
+    margin-top: 80px; /* Ajuster selon la hauteur de votre navbar */
+    height: calc(100vh - 80px); /* Hauteur disponible moins la navbar */
 }
 
 #offcanvas-cart.rounded-cart .offcanvas-header{
     border-top-right-radius: inherit;
     border-top-left-radius: inherit;
+    padding-top: 1rem;
+    position: sticky;
+    top: 0;
+    background: inherit;
+    z-index: 10;
 }
 
 @media (max-width: 575px) {
