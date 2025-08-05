@@ -1,0 +1,23 @@
+{% layout 'page' %}
+
+<!-- Test Sentry – Intégration directe -->
+<script src="https://browser.sentry-cdn.com/7.92.0/bundle.tracing.min.js" crossorigin="anonymous"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    if (!window.Sentry) {
+      console.warn("[Sentry] SDK not loaded");
+      return;
+    }
+
+    Sentry.init({
+      dsn: 'https://1d57903493b57d951ecf3e24b3238ae4@o45095330673303552.ingest.de.sentry.io/4509533875601488',
+      integrations: [new Sentry.BrowserTracing()],
+      debug: true,
+      tracesSampleRate: 1.0,
+      environment: "test-sentry-manual"
+    });
+
+    Sentry.captureException(new Error("🚨 Test Sentry déclenché depuis page.test-sentry.liquid"));
+    console.log("✅ Test Sentry déclenché manuellement.");
+  });
+</script>
