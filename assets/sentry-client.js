@@ -1,3 +1,4 @@
+// Fonction de récupération des issues depuis Sentry
 async function fetchSentryIssues(projectSlug) {
   const SENTRY_API_URL = `https://sentry.io/api/0/projects/ton-org/${projectSlug}/issues/`;
 
@@ -17,7 +18,6 @@ async function fetchSentryIssues(projectSlug) {
 
     const text = await response.text();
 
-    // 🔒 Défense : contenu vide ou réponse `{}` (vide)
     if (!text || text.trim() === '' || text.trim() === '{}') {
       console.error('[Sentry] Réponse JSON vide ou malformée');
       return { error: 'Réponse vide ou invalide' };
@@ -38,3 +38,13 @@ async function fetchSentryIssues(projectSlug) {
     return { error: 'Erreur réseau', details: fetchError };
   }
 }
+
+// Code exécuté automatiquement au chargement de la page
+document.addEventListener('DOMContentLoaded', async () => {
+  const issues = await fetchSentryIssues('TON_SLUG_PROJET_SENTRY');
+  if (issues.error) {
+    console.warn('Erreur Sentry détectée :', issues);
+  } else {
+    console.log('Issues Sentry :', issues);
+  }
+});
