@@ -37,77 +37,62 @@
 /* =====================
    Panier offcanvas
    ===================== */
-#offcanvas-cart {
-    padding-top: 80px; /* Ajuster selon la hauteur de votre navbar */
-    /* Alternative plus robuste pour éviter la troncature */
-    top: 80px !important;
-    height: calc(100vh - 80px) !important;
-    position: fixed !important;
-}
-
-/* Correction pour les écrans mobiles */
-@media (max-width: 768px) {
-    #offcanvas-cart {
-        padding-top: 70px; /* Hauteur navbar mobile */
-        top: 70px !important;
-        height: calc(100vh - 70px) !important;
-    }
-}
-
-#offcanvas-cart .offcanvas-header {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    position: sticky;
-    top: 0;
-    background: inherit;
-    z-index: 10;
-    border-bottom: 1px solid var(--bs-border-color, #dee2e6);
-}
-
 #offcanvas-cart .offcanvas-body {
     transition: all .2s ease-out;
-    padding-top: 1rem;
-    overflow-y: auto;
-    flex: 1;
 }
 
 #offcanvas-cart.loading .offcanvas-body {
     opacity: .25;
 }
 
-/* Correction du positionnement et centrage du contenu */
-#offcanvas-cart .offcanvas-header {
-    position: relative;
-    z-index: 1;
-}
-
-#offcanvas-cart .offcanvas-body {
-    padding-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-}
-
-/* Centrage des images et textes dans l'offcanvas */
+/* Fix pour la troncature d'images et de texte entre navigateurs */
 #offcanvas-cart .product-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
+    position: relative;
+    overflow: visible;
 }
 
-#offcanvas-cart .product-item img {
-    margin: 0 auto;
+#offcanvas-cart .product-item .row {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+}
+
+#offcanvas-cart .product-item .col-4,
+#offcanvas-cart .product-item .col-8 {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+#offcanvas-cart .product-item-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
     display: block;
+    max-width: 100%;
+    border-radius: 0.375rem;
 }
 
-#offcanvas-cart .text-center {
-    text-align: center !important;
+#offcanvas-cart .product-item-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+#offcanvas-cart .product-item-title a {
+    text-decoration: none;
+    color: inherit;
 }
 
 #offcanvas-cart .product-item-price {
     flex-shrink: 0;
     line-height: 1.2;
+    margin-bottom: 1rem !important;
 }
 
 #offcanvas-cart .quantity-wrapper {
@@ -156,6 +141,50 @@
     animation: offcanvas-animation-panier-vide 1s linear infinite alternate;
 }
 
+/* Fix pour la compatibilité entre navigateurs et cache */
+#offcanvas-cart {
+    --offcanvas-width: 400px;
+}
+
+#offcanvas-cart.offcanvas-end {
+    right: 0;
+    transform: translateX(100%);
+}
+
+#offcanvas-cart.show {
+    transform: translateX(0);
+}
+
+/* Force le recalcul des styles pour éviter les problèmes de cache */
+#offcanvas-cart .product-listing {
+    contain: layout style;
+    will-change: transform;
+}
+
+#offcanvas-cart .product-item {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Styles spécifiques pour Chrome en mode privé */
+@supports (-webkit-appearance: none) {
+    #offcanvas-cart .product-item-img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Styles pour améliorer la performance et éviter les problèmes de rendu */
+#offcanvas-cart .col-4 img {
+    min-height: 80px;
+    max-height: 120px;
+}
+
+#offcanvas-cart .col-8 {
+    min-width: 0;
+    flex: 1;
+}
+
 @keyframes offcanvas-animation-panier-vide {
     from {
         transform: translateX(-.5rem);
@@ -179,19 +208,11 @@
 #offcanvas-cart.rounded-cart {
     margin: 0.75rem;
     border-radius: var(--bs-border-radius);
-    /* Correction pour éviter la troncature */
-    margin-top: 80px; /* Ajuster selon la hauteur de votre navbar */
-    height: calc(100vh - 80px); /* Hauteur disponible moins la navbar */
 }
 
 #offcanvas-cart.rounded-cart .offcanvas-header{
     border-top-right-radius: inherit;
     border-top-left-radius: inherit;
-    padding-top: 1rem;
-    position: sticky;
-    top: 0;
-    background: inherit;
-    z-index: 10;
 }
 
 @media (max-width: 575px) {
