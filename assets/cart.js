@@ -32,6 +32,9 @@ window.updateCartContents = async (response) => {
       badge.removeAttribute("hidden");
     });
 
+    // Fix pour les problèmes de rendu entre navigateurs
+    fixCartDisplayIssues(offcanvasCart);
+
     offcanvasCart?.classList.remove("loading");
     cartPage?.classList.remove("loading");
 
@@ -225,3 +228,56 @@ window.onChangeCartShippingProtection = async (input) => {
   });
   window.updateCartContents(response);
 };
+
+/* =====================
+   Fix pour les problèmes de rendu entre navigateurs
+   ===================== */
+function fixCartDisplayIssues(offcanvasCart) {
+  if (!offcanvasCart) return;
+
+  // Force le recalcul des dimensions des images
+  const images = offcanvasCart.querySelectorAll('.product-item-img');
+  images.forEach(img => {
+    // Déclenche un reflow pour corriger les problèmes de cache
+    img.style.display = 'none';
+    img.offsetHeight; // Force reflow
+    img.style.display = '';
+    
+    // Assure que l'image est bien chargée
+    if (!img.complete) {
+      img.onload = () => {
+        img.style.opacity = '1';
+      };
+      img.style.opacity = '0.8';
+    }
+  });
+
+  // Fix pour les colonnes Bootstrap qui peuvent se chevaucher
+  const productItems = offcanvasCart.querySelectorAll('.product-item');
+  productItems.forEach(item => {
+    const row = item.querySelector('.row');
+    if (row) {
+      // Force le recalcul de la grille Bootstrap
+      row.style.display = 'none';
+      row.offsetHeight; // Force reflow
+      row.style.display = '';
+    }
+  });
+
+  // Déclenche un événement personnalisé pour signaler que le cart est fixé
+  window.dispatchEvent(new Event('cart.display.fixed'));
+}
+
+// Auto-fix au chargement de la page
+document.addEventListener('DOMContentLoaded', () => {
+  const offcanvasCart = document.querySelector("#offcanvas-cart");
+  if (offcanvasCart) {
+    // Fix initial
+    setTimeout(() => fixCartDisplayIssues(offcanvasCart), 100);
+    
+    // Fix quand l'offcanvas s'ouvre
+    offcanvasCart.addEventListener('shown.bs.offcanvas', () => {
+      fixCartDisplayIssues(offcanvasCart);
+    });
+  }
+});
