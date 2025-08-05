@@ -694,22 +694,27 @@ main {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* === ÉLIMINATION DES ESPACES ENTRE SECTIONS === */
-/* Suppression de tous les margins/paddings indésirables */
+/* === ÉLIMINATION DES ESPACES ENTRE SECTIONS (CORRIGÉ) === */
+/* Suppression de tous les margins/paddings indésirables mais avec corrections pour le scroll */
 
 /* Page principale sans espaces */
 body {
   margin: 0 !important;
   padding: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  min-height: 100vh !important;
 }
 
 #MainContent,
 .main-content {
   margin: 0 !important;
   padding: 0 !important;
+  min-height: 60vh !important;
+  padding-bottom: 40px !important;
 }
 
-/* Sections collées sans espaces */
+/* Sections avec espacement minimal pour éviter les collisions */
 .shopify-section {
   margin: 0 !important;
   padding: 0 !important;
@@ -741,11 +746,19 @@ body {
   padding: 0 !important;
 }
 
-/* Container sans espaces parasites */
+/* Container avec espaces restaurés pour éviter les problèmes de mise en page */
 .container,
 .container-fluid {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+
+@media (min-width: 576px) {
+  .container,
+  .container-fluid {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
 }
 
 /* === Affichage conditionnel Desktop / Mobile === */
@@ -853,13 +866,13 @@ body {
   border-radius: 4px;
 }
 
-/* === Padding pour main selon écran === */
+/* === Padding pour main selon écran (CORRIGÉ) === */
 main {
-  padding-top: 360px !important;
+  padding-top: 160px !important; /* Réduit de 360px à 160px */
 }
 @media screen and (min-width: 768px) and (max-width: 1024px) {
   main {
-    padding-top: 195px !important;
+    padding-top: 140px !important; /* Réduit de 195px à 140px */
   }
 
   .stories-bar-wrapper {
@@ -869,7 +882,7 @@ main {
 }
 @media screen and (max-width: 767px) {
   main {
-    padding-top: 256px !important;
+    padding-top: 120px !important; /* Réduit de 256px à 120px */
   }
 }
 
