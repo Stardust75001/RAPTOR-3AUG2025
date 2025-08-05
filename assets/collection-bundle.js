@@ -3,7 +3,7 @@
    Propriété de © 2019/2024 Shopiweb.fr
    Pour plus d'informations, visitez : https://www.shopiweb.fr
    ======================================================================== */
-
+const formatMoney = (value) => Shopify.formatMoney(value, Shopify.money_format || "${{amount}}");
 /* =====================
    Récupérer le contenu de l'offre groupée dans localStorage
    ===================== */
@@ -40,7 +40,7 @@ const initializeBundle = () => {
         (elem) => Number(elem.split(":")[0] * 100) > totalPrice
       );
       const tierValue = Number(tier.split(":")[0] * 100);
-      const remaining = Shopify.formatMoney(tierValue - totalPrice);
+      const remaining = formatMoney(tierValue - totalPrice);
       const percentage = tier.split(":")[1] + "%";
 
       let textUncompleted = progressText.dataset.textUncompleted;
@@ -88,11 +88,11 @@ const initializeBundle = () => {
 
     if (tier) {
       const tierDiscount = Number(tier.split(":")[1]);
-      const compareAtPrice = Shopify.formatMoney(totalPrice);
-      const price = Shopify.formatMoney((1 - tierDiscount / 100) * totalPrice);
+      const compareAtPrice = formatMoney(totalPrice);
+      const price = formatMoney((1 - tierDiscount / 100) * totalPrice);
       elem.innerHTML = `<s class="text-muted fw-normal">${compareAtPrice}</s> ${price}`;
     } else {
-      elem.innerHTML = Shopify.formatMoney(totalPrice);
+      elem.innerHTML = formatMoney(totalPrice);
     }
   });
 
@@ -108,7 +108,7 @@ const initializeBundle = () => {
       tierDiscount = Number(tier.split(":")[1]);
     }
 
-    const savings = Shopify.formatMoney((tierDiscount / 100) * totalPrice);
+    const savings = formatMoney((tierDiscount / 100) * totalPrice);
     elem.innerHTML = `${savings} (${tierDiscount}%)`;
   });
 
@@ -317,7 +317,7 @@ function initializeBundleContents() {
                             ${elem.variant_title}
                         </p>
                         <p class="product-item-price-final mb-4">
-                            ${Shopify.formatMoney(elem.variant_price)}
+                            ${formatMoney(elem.variant_price)}
                         </p>
                         <div class="d-flex align-items-center">
                             <div class="quantity-wrapper">
