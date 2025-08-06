@@ -13,7 +13,7 @@
 }
 
 main {
-  padding-top: 190px !important; /* Social bar (60px) + Navbar (80px) + Stories bar (50px) */
+  padding-top: 180px !important; /* Social bar (60px) + Navbar (80px) + Stories bar (50px) */
 }
 
 /* === Top Social Bar === */
